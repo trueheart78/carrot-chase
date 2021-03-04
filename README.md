@@ -2,7 +2,7 @@
 
 A cute little script to make me smile.
 
-## Can the 🐰 reach the 🥕? 
+## Can the 🐰 Reach the 🥕? 
 
 ### Starting Strong
 
