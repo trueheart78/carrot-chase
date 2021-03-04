@@ -1,1 +1,3 @@
-# carrot-chase
+# Carrot Chase
+
+Can the 🐰 reach the 🥕? 
