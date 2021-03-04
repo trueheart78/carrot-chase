@@ -1,22 +1,24 @@
 # Carrot Chase
 
+A cute little script to make me smile.
+
 ## Can the 🐰 reach the 🥕? 
+
+### Starting Strong
 
 ![starting][one]
 
-Starting strong, lil bun.
+### Almost There
 
 ![almost there][two]
 
-Getting there...
+### Oh No! The 🐰 Has Fallen Behind!
 
 ![oh no][three]
 
-Oh no! What happened?
+### The 🐰 Won! 👑
 
 ![winner][winner]
-
-WHAT!? You got it!? Congratulations!
 
 ## Execution
 
