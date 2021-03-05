@@ -8,8 +8,9 @@ class CarrotChase
   def initialize
     @bun_position = rand 0..MAX_DISTANCE
     @sun_position = rand 0...MAX_DISTANCE
-    @sun_inserted = false
     @output = []
+    
+    validate_sun_position
   end
 
   def to_s
@@ -21,20 +22,20 @@ class CarrotChase
   private
   
   def build_output
-    validate_sun_position
-    set_green_grass
+    set_grass_as_green
     add_starting_grass
     if bun_wins?
-      celebrate
+      celebrate_win
     else
       long_for_victory
     end
-    reset_color
+    reset_output_color
   end
   
-  def celebrate
+  def celebrate_win
     add_space
     add_sparkles
+    add_bun
     add_carrot
     add_sparkles
   end
@@ -45,6 +46,45 @@ class CarrotChase
     add_carrot
   end
   
+  def add_starting_grass
+    add_grass 0...@bun_position
+  end
+  
+  def add_remaining_grass
+    add_grass @bun_position+1...MAX_DISTANCE
+  end
+  
+  def add_grass(range)
+    range.each do |n|
+      if @sun_position == n
+        add_sun
+        next
+      end
+      
+      @output.push '.'
+    end
+  end
+  
+  def add_sun
+    @output.push ['☀️','🌤','⛅️','🌥'].sample
+  end
+  
+  def add_bun
+    @output.push '🐰'
+  end
+  
+  def add_carrot
+    @output.push '🥕'
+  end
+
+  def add_sparkles
+    @output.push '✨'
+  end
+  
+  def add_space
+    @output.push ' '
+  end
+
   def validate_sun_position
     return unless @sun_position == @bun_position
     
@@ -58,61 +98,25 @@ class CarrotChase
       end
     end
   end
-  
-  def add_starting_grass
-    @output << ('.' * @bun_position)
-  end
-  
-  def add_remaining_grass
-    @output << ('.' * distance_left)
-  end
-  
-  def add_sun
-    @output << ['☀️','🌤','⛅️','🌥'].sample
-  end
-  
-  def add_bun
-    @output << '🐰'
-  end
-  
-  def add_carrot
-    @output << '🥕'
-  end
-
-  def distance_left
-    @distance_left ||= MAX_DISTANCE - @bun_position
-  end
 
   def bun_wins?
-    distance_left == 0
+    @bun_position == MAX_DISTANCE
   end
   
   def bun_at_start?
     @bun_position == 0
   end
   
-  def sun_inserted?
-    @sun_inserted
-  end
-  
   def heads?
     rand(1..2).odd?
   end
   
-  def add_sparkles
-    @output << '✨'
-  end
-  
-  def add_space
-    @output << ' '
-  end
-  
-  def set_green_grass
-    @output << '\033[32m'
+  def set_grass_as_green
+    @output.push "\033[32m"
   end
 
-  def reset_color
-    @output << '\033[39m'
+  def reset_output_color
+    @output.push "\033[39m"
   end
 end
 
