@@ -6,19 +6,19 @@ A cute little script to make me smile. 😁
 
 ### Strong Start, 🐰. You Got This!
 
-![starting][one]
+![starting][just starting]
 
 ### Almost There, 🐰. You Can Do It!
 
-![almost there][two]
+![almost there][almost there]
 
 ### Oh No! Poor 🐰 Has Fallen Behind!
 
-![oh no][three]
+![oh no][falling behind]
 
 ### The 🐰 Won! The 🐰 Won! 👑
 
-![winner][winner]
+![winner][sweet victory]
 
 ## Execution
 
@@ -32,7 +32,7 @@ or
 ruby carrot_chase.rb
 ```
 
-[one]: assets/one.png
-[two]: assets/two.png
-[three]: assets/three.png
-[winner]: assets/winner.png
+[just starting]:  assets/1-just-starting.png
+[almost there]:   assets/2-almost-there.png
+[falling behind]: assets/3-falling-behind.png
+[sweet victory]:  assets/4-victory.png
