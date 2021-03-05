@@ -4,7 +4,7 @@ A cute little script to make me smile. 😁
 
 ## Can the 🐰 Reach the 🥕? 
 
-### Strong Start, 🐰. You Got This!
+### Ok, Let's Get Started, 🐰! You Got This!
 
 ![starting][just starting]
 
