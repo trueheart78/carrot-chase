@@ -6,37 +6,81 @@ class CarrotChase
   MAX_DISTANCE = 59.freeze
 
   def initialize
-    @position = rand 0..MAX_DISTANCE
+    @bun_position = rand 0..MAX_DISTANCE
+    @output = []
   end
 
-  def display
-    print green
-    @position.times { print "." }
-    print " ✨" if win?
-    print "🐰"
-    pellets_left.times { print "." }
-    print "🥕"
-    print "✨" if win?
-    puts default
+  def to_s
+    build_output unless @output.any?
+    
+    @output.join
   end
 
   private
-
-  def pellets_left
-    MAX_DISTANCE - @position
+  
+  def build_output
+    set_green_grass
+    add_starting_grass
+    if bun_wins?
+      celebrate
+    else
+      long_for_victory
+    end
+    reset_color
+  end
+  
+  def celebrate
+    add_space
+    add_sparkles
+    add_carrot
+    add_sparkles
+  end
+  
+  def long_for_victory
+    add_bun
+    add_remaining_grass
+    add_carrot
+  end
+  
+  def add_starting_grass
+    @output << ('.' * @bun_position)
+  end
+  
+  def add_remaining_grass
+    @output << ('.' * distance_left)
+  end
+  
+  def add_bun
+    @output << '🐰'
+  end
+  
+  def add_carrot
+    @output << '🥕'
   end
 
-  def win?
-    pellets_left == 0
+  def distance_left
+    @distance_left ||= MAX_DISTANCE - @bun_position
   end
 
-  def green
-    "\033[32m"
+  def bun_wins?
+    distance_left == 0
+  end
+  
+  def add_sparkles
+    @output << '✨'
+  end
+  
+  def add_space
+    @output << ' '
+  end
+  
+  def set_green_grass
+    @output << '\033[32m'
   end
 
-  def default
-    "\033[39m"
+  def reset_color
+    @output << '\033[39m'
   end
 end
 
-CarrotChase.new.display
+puts CarrotChase.new
