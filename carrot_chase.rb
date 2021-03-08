@@ -1,15 +1,18 @@
 #!/usr/bin/env ruby
 
 # frozen_string_literal: true
+require 'tmpdir'
 
 class CarrotChase
-  MAX_DISTANCE = 59.freeze
+  MAX_DISTANCE     = 59
+  MOVABLE_DISTANCE = 8
 
   def initialize
-    @bun_position = rand 0..MAX_DISTANCE
+    @bun_position = rand starting_position..max_starting_position
     @sun_position = rand 0...MAX_DISTANCE
     @output = []
 
+    save_bun_position
     validate_sun_position
   end
 
@@ -88,15 +91,40 @@ class CarrotChase
   def validate_sun_position
     return unless @sun_position == @bun_position
 
-    if bun_at_start?
-      @sun_position = rand 1...MAX_DISTANCE
-    else
-      if heads?
-        @sun_position = rand 0...@bun_position
-      else
-        @sun_position = rand @bun_position+1...MAX_DISTANCE
-      end
+    @sun_position = if bun_at_start?
+                      rand 1...MAX_DISTANCE
+                    elsif heads?
+                      rand 0...@bun_position
+                    else
+                      rand @bun_position + 1...MAX_DISTANCE
+                    end
+  end
+
+  def starting_position
+    @starting_position = 0
+
+    return @starting_position unless File.exist?(temp_file)
+
+    @starting_position = File.readlines(temp_file).map(&:chomp).first.to_i
+    @starting_position = 0 if @starting_position == MAX_DISTANCE
+
+    @starting_position
+  end
+
+  def max_starting_position
+    return MAX_DISTANCE if close_starting_position?
+
+    @starting_position += MOVABLE_DISTANCE
+  end
+
+  def save_bun_position
+    File.open(temp_file, 'w') do |file|
+      file.write @bun_position
     end
+  end
+
+  def temp_file
+    @temp_file ||= [Dir.tmpdir, 'carrot_chase.dat'].join '/'
   end
 
   def bun_wins?
@@ -104,11 +132,15 @@ class CarrotChase
   end
 
   def bun_at_start?
-    @bun_position == 0
+    @bun_position.zero?
   end
 
   def heads?
     rand(1..2).odd?
+  end
+
+  def close_starting_position?
+    (MAX_DISTANCE - @starting_position) < MOVABLE_DISTANCE
   end
 
   def set_grass_as_green
