@@ -34,6 +34,9 @@ A temp file is used to track progress across multiple calls. This creates increm
 as opposed to the pure randomness of the original design. It also keeps the position of the sun
 the same for each chase.
 
+The temp file is stored in the directory returned by `Dir.tmpdir`, and is called
+`carrot_chase.json`.
+
 [just starting]:  assets/1-just-starting.png
 [almost there]:   assets/2-almost-there.png
 [sweet victory]:  assets/3-victory.png
