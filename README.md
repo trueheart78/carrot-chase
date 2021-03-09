@@ -4,17 +4,7 @@ A cute little script to make me smile. 😁
 
 ## Can the 🐰 Reach the 🥕? 
 
-### Ok, Let's Get Started, 🐰! You Got This!
-
-![starting][just starting]
-
-### Almost There, 🐰. You Can Do It!
-
-![almost there][almost there]
-
-### The 🐰 Won! The 🐰 Won! 👑
-
-![winner][sweet victory]
+![example][example]
 
 ## Execution
 
@@ -37,6 +27,4 @@ the same for each chase.
 The temp file is stored in the directory returned by `Dir.tmpdir`, and is called
 `carrot_chase.json`.
 
-[just starting]:  assets/1-just-starting.png
-[almost there]:   assets/2-almost-there.png
-[sweet victory]:  assets/3-victory.png
+[example]:  assets/example.png
