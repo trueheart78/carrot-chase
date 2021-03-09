@@ -2,18 +2,19 @@
 
 # frozen_string_literal: true
 require 'tmpdir'
+require 'json'
 
 class CarrotChase
   MAX_DISTANCE     = 59
-  MOVABLE_DISTANCE = 8
+  MAX_SUN_DISTANCE = 54
+  MOVABLE_DISTANCE = 10
 
   def initialize
-    @bun_position = rand starting_position..max_starting_position
-    @sun_position = rand 0...MAX_DISTANCE
     @output = []
 
-    save_bun_position
-    validate_sun_position
+    initiate_positions
+    validate_positions
+    save_positions
   end
 
   def to_s
@@ -36,7 +37,6 @@ class CarrotChase
   end
 
   def celebrate_win
-    add_space
     add_sparkles
     add_bun
     add_carrot
@@ -84,31 +84,35 @@ class CarrotChase
     @output.push '✨'
   end
 
-  def add_space
-    @output.push ' '
-  end
-
-  def validate_sun_position
+  def validate_positions
     return unless @sun_position == @bun_position
 
-    @sun_position = if bun_at_start?
-                      rand 1...MAX_DISTANCE
-                    elsif heads?
-                      rand 0...@bun_position
-                    else
-                      rand @bun_position + 1...MAX_DISTANCE
-                    end
+    @bun_position += 1
   end
 
-  def starting_position
+  def initiate_positions
     @starting_position = 0
 
-    return @starting_position unless File.exist?(temp_file)
+    load_positions
 
-    @starting_position = File.readlines(temp_file).map(&:chomp).first.to_i
-    @starting_position = 0 if @starting_position == MAX_DISTANCE
+    @bun_position = rand @starting_position..max_starting_position
+    @sun_position = rand 0..MAX_SUN_DISTANCE if reset_positions?
 
-    @starting_position
+    nudge_bun
+  end
+
+  def nudge_bun
+    return if @starting_position.zero?
+
+    @bun_position += 1 if @bun_position == @starting_position
+  end
+
+  def load_positions
+    return unless File.exist?(temp_file)
+    return if reset_positions?
+
+    @starting_position = cached_positions[:start]
+    @sun_position = cached_positions[:sun]
   end
 
   def max_starting_position
@@ -117,26 +121,30 @@ class CarrotChase
     @starting_position += MOVABLE_DISTANCE
   end
 
-  def save_bun_position
-    File.open(temp_file, 'w') do |file|
-      file.write @bun_position
-    end
+  def save_positions
+    File.open(temp_file, 'w') { |f| f.write position_data.to_json }
+  end
+
+  def cached_positions
+    @cached_positions ||= JSON.parse(File.read(temp_file), symbolize_names: true)
+  end
+
+  def position_data
+    @position_data ||= { start: @bun_position, sun: @sun_position }
   end
 
   def temp_file
-    @temp_file ||= [Dir.tmpdir, 'carrot_chase.dat'].join '/'
+    @temp_file ||= [Dir.tmpdir, 'carrot_chase.json'].join '/'
+  end
+
+  def reset_positions?
+    cached_positions[:start] == MAX_DISTANCE
+  rescue Errno::ENOENT
+    true
   end
 
   def bun_wins?
     @bun_position == MAX_DISTANCE
-  end
-
-  def bun_at_start?
-    @bun_position.zero?
-  end
-
-  def heads?
-    rand(1..2).odd?
   end
 
   def close_starting_position?
