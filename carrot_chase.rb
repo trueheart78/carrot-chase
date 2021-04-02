@@ -111,7 +111,7 @@ class CarrotChase
     return unless File.exist?(temp_file)
     return if reset_positions?
 
-    @starting_position = cached_positions[:start]
+    @starting_position = cached_positions[:start].to_i
     @sun_position = cached_positions[:sun]
   end
 
